@@ -14,6 +14,7 @@ class Region extends Component {
 				<div data-dir='sw' style={style.RegionHandleSW} />
 				<div data-dir='nw' style={style.RegionHandleNW} />
 				<div data-dir='ne' style={style.RegionHandleNE} />
+				<div style={style.RegionClose}>X</div>
 			</div>
 		);
 	}

@@ -10,6 +10,9 @@ class App extends Component {
 		this.regionRenderer = this.regionRenderer.bind(this);
 		this.onChange = this.onChange.bind(this);
 		this.state = {
+			current: 'anchor',
+			anchorName: '',
+			captureName: '',
 			regions: []
 		};
 	}
@@ -18,6 +21,7 @@ class App extends Component {
 			regions: regions
 		});
 	}
+
 	changeRegionData (index, event) {
 		const region = this.state.regions[index];
 		let color;
@@ -46,6 +50,7 @@ class App extends Component {
 			...this.state.regions.slice(index + 1)
 		]);
 	}
+	
 	regionRenderer (regionProps) {
 		if (!regionProps.isChanging) {
 			return (
@@ -59,6 +64,7 @@ class App extends Component {
 			);
 		}
 	}
+
 	render() {
 		const regionStyle = {
 			background: 'rgba(255, 0, 0, 0.5)'
@@ -70,7 +76,7 @@ class App extends Component {
 					<RegionSelect
 						maxRegions={1}
 						regions={this.state.regions}
-            regionStyle={regionStyle}
+            			regionStyle={regionStyle}
 						constraint
 						onChange={this.onChange}
 						regionRenderer={this.regionRenderer}
@@ -81,7 +87,15 @@ class App extends Component {
 				</div>
 				<div style={{ flexGrow: 1, flexShrink: 1, width: '50%', padding: 15 }}>
 					Select something with your mouse on the left side
+					<br />
+					<input onChange={this.anchorName}></input>
+					<button onClick={this.addAnchor}>Add Anchor</button>
+					<br />
+					<input onChange={this.captureName}></input>
+					<button onClick={this.addCapture}>Add Capture</button>
+					<br />
 				</div>
+
 			</div>
 		);
 	}

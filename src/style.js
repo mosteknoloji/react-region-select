@@ -46,6 +46,12 @@ const style = {
 		border: '1px solid rgba(255,255,255,0.5)',
 		cursor: 'ne-resize'
 	},
+	RegionClose: {
+		position: 'absolute',
+		top: -1 * handleSize/2 - 15,
+		right: -1 * handleSize/2 - 15,
+		cursor: 'pointer'
+	},
 	RegionSelect: {
 		position: 'relative',
 		display: 'inline-block'		
