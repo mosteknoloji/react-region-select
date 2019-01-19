@@ -26,11 +26,16 @@ class App extends Component {
 	}
 
 	addAnchor() {
-		this.addRegion(57.31, 8.72, 20, 10, 'rgba(0, 255, 0, 0.5)', this.state.anchorName, null);
+		this.addRegion(57.31, 8.72, 20, 10, 'rgba(255, 255, 0, 0.5)', this.state.anchorName, null);
 	}
 
 	addCapture() {
-
+		// anchor
+		const index = this.state.regions.findIndex(x => x.data.parent === null);
+		const anchor = this.state.regions[index];
+		// anchor ex
+		
+		this.addRegion(57.31, 8.72, 20, 10, 'rgba(0, 255, 0, 0.5)', this.state.captureName, anchor.guid);
 	}
 
 	addRegion(x, y, width, height, color, label, parent) {
@@ -39,7 +44,7 @@ class App extends Component {
 			var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
 			return v.toString(16);
 		});
-
+		
 		const regions = this.state.regions;
 		const region = {
 			x: x,

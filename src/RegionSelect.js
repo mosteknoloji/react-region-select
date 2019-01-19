@@ -188,10 +188,8 @@ class RegionSelect extends Component {
 	}
 
 	onDelete(id) {
-		const i = this.props.regions.findIndex(x => x.guid===id);
-		this.props.regions.splice(i, 1);
-		this.props.onChange(this.props.regions);
-
+		var removed = this.props.regions.filter((x) => x.guid != id && x.data.parent != id);
+		this.props.onChange(removed);
 	}
 
 	renderRect (rect, index) {
