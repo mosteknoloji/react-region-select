@@ -9,7 +9,13 @@ class App extends Component {
 		super(props);
 		this.regionRenderer = this.regionRenderer.bind(this);
 		this.onChange = this.onChange.bind(this);
+		this.addRegion = this.addRegion.bind(this);
+		this.addAnchor = this.addAnchor.bind(this);
+		this.addCapture = this.addCapture.bind(this);
 		this.state = {
+			current: 'anchor',
+			anchorName: '',
+			captureName: '',
 			regions: []
 		};
 	}
@@ -18,70 +24,93 @@ class App extends Component {
 			regions: regions
 		});
 	}
-	changeRegionData (index, event) {
-		const region = this.state.regions[index];
-		let color;
-		switch (event.target.value) {
-		case '1':
-			color = 'rgba(0, 255, 0, 0.5)';
-			break;
-		case '2':
-			color = 'rgba(0, 0, 255, 0.5)';
-			break;
-		case '3':
-			color = 'rgba(255, 0, 0, 0.5)';
-			break;
-		default:
-			color = 'rgba(0, 0, 0, 0.5)';
-		}
 
-		region.data.regionStyle = {
-			background: color
-		};
-		this.onChange([
-			...this.state.regions.slice(0, index),
-			objectAssign({}, region, {
-				data: objectAssign({}, region.data, { dataType: event.target.value })
-			}),
-			...this.state.regions.slice(index + 1)
-		]);
+	addAnchor() {
+		this.addRegion(57.31, 8.72, 20, 10, 'rgba(255, 255, 0, 0.5)', this.state.anchorName, null);
 	}
+
+	addCapture() {
+		// anchor
+		const index = this.state.regions.findIndex(x => x.data.parent === null);
+		const anchor = this.state.regions[index];
+		// anchor ex
+
+		this.addRegion(57.31, 8.72, 20, 10, 'rgba(0, 255, 0, 0.5)', this.state.captureName, anchor.guid);
+	}
+
+	addRegion(x, y, width, height, color, label, parent) {
+
+		const guid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+			var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+			return v.toString(16);
+		});
+		
+		const regions = this.state.regions;
+		const region = {
+			x: x,
+			y: y,
+			width: width,
+			height: height,
+			data: {
+				parent: parent,
+				label: label,
+				regionStyle: {
+					background: color
+				}
+			},
+			guid: guid,
+			isChanging: false
+		};
+		regions.push(region);
+		this.setState({regions: regions});
+	}
+
+	onDelete(id) {
+		const regions = this.state.regions;
+		var removed = regions.filter((x) => x.guid != id && x.data.parent != id);
+		this.onChange(removed);
+	}
+	
 	regionRenderer (regionProps) {
-		if (!regionProps.isChanging) {
+		if (!regionProps.isChanging) { 
 			return (
-				<div style={{ position: 'absolute', right: 0, bottom: '-1.5em' }}>
-					<select onChange={(event) => this.changeRegionData(regionProps.index, event)} value={regionProps.data.dataType}>
-						<option value='1'>Green</option>
-						<option value='2'>Blue</option>
-						<option value='3'>Red</option>
-					</select>
+				<div>
+					<div style={{ position: 'absolute', left: 0, top: '-1.5em' }}>
+						<label>{regionProps.data.label}</label>
+					</div>
+					<div onClick={() => this.onDelete(regionProps.guid)} style={{ position: 'absolute', right: '-1.5em', top: '-1.5em' }}>
+						<label>X</label>
+					</div>
 				</div>
 			);
 		}
 	}
+
 	render() {
-		const regionStyle = {
-			background: 'rgba(255, 0, 0, 0.5)'
-		};
 
 		return (
 			<div style={{ display: 'flex' }}>
 				<div style={{ flexGrow: 1, flexShrink: 1, width: '50%' }}>
 					<RegionSelect
-						maxRegions={1}
-						regions={this.state.regions}
-            regionStyle={regionStyle}
 						constraint
-						onChange={this.onChange}
+						regions={this.state.regions}
 						regionRenderer={this.regionRenderer}
-						style={{ border: '1px solid black' }}
+						onChange={this.onChange}
 					>
 						<img src='/static/example-doc.jpg' width='100%'/>
 					</RegionSelect>
 				</div>
 				<div style={{ flexGrow: 1, flexShrink: 1, width: '50%', padding: 15 }}>
 					Select something with your mouse on the left side
+					<br />
+					<input onChange={(event) => this.setState({anchorName: event.target.value})}></input>
+					<button onClick={this.addAnchor}>Add Anchor</button>
+					<br />
+					<input onChange={(event) => this.setState({captureName: event.target.value})}></input>
+					<button onClick={this.addCapture}>Add Capture</button>
+					<br />
 				</div>
+
 			</div>
 		);
 	}

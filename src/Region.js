@@ -7,6 +7,8 @@ class Region extends Component {
 	constructor (props) {
 		super(props);
 	}
+
+
 	renderHandles () {
 		return (
 			<div>
@@ -17,6 +19,7 @@ class Region extends Component {
 			</div>
 		);
 	}
+
 	render () {
 		const localStyle = {
 			width: this.props.width + '%',
@@ -27,7 +30,7 @@ class Region extends Component {
 		const dataRenderArgs = {
 			data: this.props.data,
 			isChanging: this.props.changing,
-			index: this.props.index
+			guid: this.props.guid
 		};
 
 		return (
@@ -37,7 +40,7 @@ class Region extends Component {
 				onTouchStart={this.props.onCropStart}
 				data-wrapper="wrapper"
 				>
-				{this.props.handles ? this.renderHandles() : null}
+				{this.renderHandles()}
 				{this.props.dataRenderer ? this.props.dataRenderer(dataRenderArgs) : null}
 			</div>
 		);
@@ -48,9 +51,8 @@ Region.propTypes = {
 	y: PropTypes.number.isRequired,
 	width: PropTypes.number.isRequired,
 	height: PropTypes.number.isRequired,
-	index: PropTypes.number.isRequired,
+	guid: PropTypes.string.isRequired,
 	onCropStart: PropTypes.func.isRequired,
-	handles: PropTypes.bool,
 	changing: PropTypes.bool,
 	dataRenderer: PropTypes.func,
 	data: PropTypes.object,

@@ -5,14 +5,14 @@ import Region from './Region';
 import style from './style';
 
 class RegionSelect extends Component {
+	
 	constructor (props) {
 		super(props);
-		this.onComponentMouseTouchDown = this.onComponentMouseTouchDown.bind(this);
 		this.onDocMouseTouchMove = this.onDocMouseTouchMove.bind(this);
 		this.onDocMouseTouchEnd = this.onDocMouseTouchEnd.bind(this);
 		this.onRegionMoveStart = this.onRegionMoveStart.bind(this);
-		this.regionCounter = 0;
 	}
+
 	componentDidMount() {
 		document.addEventListener('mousemove', this.onDocMouseTouchMove);
 		document.addEventListener('touchmove', this.onDocMouseTouchMove);
@@ -21,6 +21,7 @@ class RegionSelect extends Component {
 		document.addEventListener('touchend', this.onDocMouseTouchEnd);
 		document.addEventListener('touchcancel', this.onDocMouseTouchEnd);
 	}
+
 	componentWillUnmount() {
 		document.removeEventListener('mousemove', this.onDocMouseTouchMove);
 		document.removeEventListener('touchmove', this.onDocMouseTouchMove);
@@ -29,6 +30,7 @@ class RegionSelect extends Component {
 		document.removeEventListener('touchend', this.onDocMouseTouchEnd);
 		document.removeEventListener('touchcancel', this.onDocMouseTouchEnd);
 	}
+
 	getClientPos(e) {
 		let pageX, pageY;
 
@@ -49,7 +51,7 @@ class RegionSelect extends Component {
 		if (!this.isChanging) {
 			return;
 		}
-		const index = this.regionChangeIndex;
+		const index = this.props.regions.findIndex(x => x.guid===this.regionChangeId);
 		const updatingRegion = this.props.regions[index];
 		const clientPos = this.getClientPos(event);
 		const regionChangeData = this.regionChangeData;
@@ -100,13 +102,12 @@ class RegionSelect extends Component {
 	onDocMouseTouchEnd () {
 		if (this.isChanging) {
 			this.isChanging = false;
-			const index = this.regionChangeIndex;
+			const index = this.props.regions.findIndex(x => x.guid===this.regionChangeId);
 			const updatingRegion = this.props.regions[index];
 			const changes = {
-				new: false,
 				isChanging: false
 			};
-			this.regionChangeIndex = null;
+			this.regionChangeId = null;
 			this.regionChangeData = null;
 			this.props.onChange([
 				...this.props.regions.slice(0, index),
@@ -115,47 +116,7 @@ class RegionSelect extends Component {
 			]);
 		}
 	}
-	onComponentMouseTouchDown (event) {
-		if (event.target.dataset.wrapper || event.target.dataset.dir || isSubElement(event.target, (el) => el.dataset && el.dataset.wrapper)) {
-			return;
-		}
-		event.preventDefault();
-		const clientPos = this.getClientPos(event);
-		const imageOffset = this.getElementOffset(this.refs.image);
-		const xPc = (clientPos.x - imageOffset.left) / this.refs.image.offsetWidth * 100;
-		const yPc = (clientPos.y - imageOffset.top) / this.refs.image.offsetHeight * 100;
-		this.isChanging = true;
-		const rect = {
-			x: xPc,
-			y: yPc,
-			width: 0,
-			height: 0,
-			new: true,
-			data: { index: this.regionCounter },
-			isChanging: true
-		};
-		this.regionCounter += 1;
-		this.regionChangeData = {
-			imageOffsetLeft: imageOffset.left,
-			imageOffsetTop: imageOffset.top,
-			clientPosXStart: clientPos.x,
-			clientPosYStart: clientPos.y,
-			imageWidth: this.refs.image.offsetWidth,
-			imageHeight: this.refs.image.offsetHeight,
-			isMove: false
-		};
 
-		if (this.props.regions.length < this.props.maxRegions) {
-			this.props.onChange(this.props.regions.concat(rect));
-			this.regionChangeIndex = this.props.regions.length;
-		} else {
-			this.props.onChange([
-				...this.props.regions.slice(0, this.props.maxRegions - 1),
-				rect
-			]);
-			this.regionChangeIndex = this.props.maxRegions - 1;
-		}
-	}
 	getElementOffset (el) {
 		const rect = el.getBoundingClientRect();
 		const docEl = document.documentElement;
@@ -168,17 +129,17 @@ class RegionSelect extends Component {
 			left: rectLeft
 		};
 	}
-	onRegionMoveStart (event, index) {
+
+	onRegionMoveStart (event, id) {
 		if (!event.target.dataset.wrapper && !event.target.dataset.dir) {
 			return;
 		}
 		event.preventDefault();
-
 		const clientPos = this.getClientPos(event);
 		const imageOffset = this.getElementOffset(this.refs.image);
 
 		let clientPosXStart, clientPosYStart;
-
+		const index = this.props.regions.findIndex(x => x.guid===id);
 		const currentRegion = this.props.regions[index];
 		const regionLeft = (currentRegion.x / 100 * this.refs.image.offsetWidth) + imageOffset.left;
 		const regionTop = (currentRegion.y / 100 * this.refs.image.offsetHeight) + imageOffset.top;
@@ -223,24 +184,26 @@ class RegionSelect extends Component {
 			resizeDir: resizeDir
 		};
 
-		this.regionChangeIndex = index;
+		this.regionChangeId = id;
 	}
+
+
 	renderRect (rect, index) {
 		return <Region
 			x={rect.x}
 			y={rect.y}
 			width={rect.width}
 			height={rect.height}
-			handles={!rect.new}
 			data={rect.data}
-			key={index}
-			index={index}
+			key={rect.guid}
+			guid={rect.guid}
 			customStyle={this.props.regionStyle}
 			dataRenderer={this.props.regionRenderer}
-			onCropStart={(event) => this.onRegionMoveStart(event, index)}
-			changing={index === this.regionChangeIndex}
+			onCropStart={(event) => this.onRegionMoveStart(event, rect.guid)}
+			changing={rect.guid === this.regionChangeId}
 		/>;
 	}
+
 	render () {
 		const regions = this.props.regions;
 		return (
@@ -248,8 +211,7 @@ class RegionSelect extends Component {
 				ref='image'
 				style={objectAssign({}, style.RegionSelect, this.props.style)}
 				className={this.props.className}
-				onTouchStart={this.onComponentMouseTouchDown}
-				onMouseDown={this.onComponentMouseTouchDown}>
+				>
 				{regions.map(this.renderRect.bind(this))}
 				{this.props.debug
 					? <table style={{position:'absolute', right: 0, top: 0}}>
@@ -278,14 +240,12 @@ RegionSelect.propTypes = {
 	children: PropTypes.any,
 	onChange: PropTypes.func.isRequired,
 	regionRenderer: PropTypes.func,
-	maxRegions: PropTypes.number,
 	debug: PropTypes.bool,
 	className: PropTypes.string,
 	style: PropTypes.object,
 	regionStyle: PropTypes.object
 };
 RegionSelect.defaultProps = {
-	maxRegions: Infinity,
 	debug: false,
 	regions: [],
 	constraint: false
