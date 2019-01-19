@@ -64,12 +64,23 @@ class App extends Component {
 		regions.push(region);
 		this.setState({regions: regions});
 	}
+
+	onDelete(id) {
+		const regions = this.state.regions;
+		var removed = regions.filter((x) => x.guid != id && x.data.parent != id);
+		this.onChange(removed);
+	}
 	
 	regionRenderer (regionProps) {
-		if (!regionProps.isChanging) {
+		if (!regionProps.isChanging) { 
 			return (
-				<div style={{ position: 'absolute', left: 0, top: '-1.5em' }}>
-				<label>{regionProps.data.label}</label>
+				<div>
+					<div style={{ position: 'absolute', left: 0, top: '-1.5em' }}>
+						<label>{regionProps.data.label}</label>
+					</div>
+					<div onClick={() => this.onDelete(regionProps.guid)} style={{ position: 'absolute', right: '-1.5em', top: '-1.5em' }}>
+						<label>X</label>
+					</div>
 				</div>
 			);
 		}

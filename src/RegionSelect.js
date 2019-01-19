@@ -187,10 +187,6 @@ class RegionSelect extends Component {
 		this.regionChangeId = id;
 	}
 
-	onDelete(id) {
-		var removed = this.props.regions.filter((x) => x.guid != id && x.data.parent != id);
-		this.props.onChange(removed);
-	}
 
 	renderRect (rect, index) {
 		return <Region
@@ -203,7 +199,6 @@ class RegionSelect extends Component {
 			guid={rect.guid}
 			customStyle={this.props.regionStyle}
 			dataRenderer={this.props.regionRenderer}
-			onDelete={(id) => this.onDelete(id)}
 			onCropStart={(event) => this.onRegionMoveStart(event, rect.guid)}
 			changing={rect.guid === this.regionChangeId}
 		/>;
@@ -244,7 +239,6 @@ RegionSelect.propTypes = {
 	regions: PropTypes.array,
 	children: PropTypes.any,
 	onChange: PropTypes.func.isRequired,
-	onDelete: PropTypes.func,
 	regionRenderer: PropTypes.func,
 	debug: PropTypes.bool,
 	className: PropTypes.string,
