@@ -59,28 +59,6 @@ class App extends Component {
 		regions.push(region);
 		this.setState({regions: regions});
 	}
-
-	changeRegionData (index, event) {
-
-		const region = this.state.regions[index];
-		let color;
-		if (region.data.label === 'anchor') {
-			color = 'rgba(0, 255, 0, 0.5)';
-		} else {
-			color = 'rgba(0, 0, 255, 0.5)';
-		}
-
-		region.data.regionStyle = {
-			background: color
-		};
-		this.onChange([
-			...this.state.regions.slice(0, index),
-			objectAssign({}, region, {
-				data: objectAssign({}, region.data, { dataType: event.target.value })
-			}),
-			...this.state.regions.slice(index + 1)
-		]);
-	}
 	
 	regionRenderer (regionProps) {
 		if (!regionProps.isChanging) {
