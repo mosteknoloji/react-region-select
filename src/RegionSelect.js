@@ -188,10 +188,9 @@ class RegionSelect extends Component {
 	}
 
 	onDelete(id) {
-		console.log("DELETE PRESSED in renderer", id);
 		const i = this.props.regions.findIndex(x => x.guid===id);
-		console.log(i);
-		this.props.onChange(this.props.regions.slice(i, 1));
+		this.props.regions.splice(i, 1);
+		this.props.onChange(this.props.regions);
 
 	}
 

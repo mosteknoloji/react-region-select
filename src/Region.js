@@ -9,7 +9,6 @@ class Region extends Component {
 	}
 
 	delete = () => {
-		console.log("delete in regin");
 		this.props.onDelete ? this.props.onDelete(this.props.guid) : null;
 	}
 
