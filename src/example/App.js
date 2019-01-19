@@ -74,7 +74,7 @@ class App extends Component {
 			<div style={{ display: 'flex' }}>
 				<div style={{ flexGrow: 1, flexShrink: 1, width: '50%' }}>
 					<RegionSelect
-						maxRegions={1}
+						maxRegions={0}
 						regions={this.state.regions}
             			regionStyle={regionStyle}
 						constraint
@@ -88,10 +88,10 @@ class App extends Component {
 				<div style={{ flexGrow: 1, flexShrink: 1, width: '50%', padding: 15 }}>
 					Select something with your mouse on the left side
 					<br />
-					<input onChange={this.anchorName}></input>
+					<input onChange={(event) => this.setState({anchorName: event.target.value})}></input>
 					<button onClick={this.addAnchor}>Add Anchor</button>
 					<br />
-					<input onChange={this.captureName}></input>
+					<input onChange={(event) => this.setState({captureName: event.target.value})}></input>
 					<button onClick={this.addCapture}>Add Capture</button>
 					<br />
 				</div>

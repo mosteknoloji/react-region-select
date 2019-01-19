@@ -116,6 +116,11 @@ class RegionSelect extends Component {
 		}
 	}
 	onComponentMouseTouchDown (event) {
+
+		if (this.props.maxRegions === 0) {
+			return;
+		}
+
 		if (event.target.dataset.wrapper || event.target.dataset.dir || isSubElement(event.target, (el) => el.dataset && el.dataset.wrapper)) {
 			return;
 		}
@@ -277,6 +282,7 @@ RegionSelect.propTypes = {
 	regions: PropTypes.array,
 	children: PropTypes.any,
 	onChange: PropTypes.func.isRequired,
+	onDelete: PropTypes.func,
 	regionRenderer: PropTypes.func,
 	maxRegions: PropTypes.number,
 	debug: PropTypes.bool,
