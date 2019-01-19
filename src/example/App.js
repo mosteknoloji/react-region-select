@@ -34,7 +34,7 @@ class App extends Component {
 		const index = this.state.regions.findIndex(x => x.data.parent === null);
 		const anchor = this.state.regions[index];
 		// anchor ex
-		
+
 		this.addRegion(57.31, 8.72, 20, 10, 'rgba(0, 255, 0, 0.5)', this.state.captureName, anchor.guid);
 	}
 
@@ -68,7 +68,7 @@ class App extends Component {
 	regionRenderer (regionProps) {
 		if (!regionProps.isChanging) {
 			return (
-				<div style={{ position: 'absolute', right: 0, bottom: '-1.5em' }}>
+				<div style={{ position: 'absolute', left: 0, top: '-1.5em' }}>
 				<label>{regionProps.data.label}</label>
 				</div>
 			);
