@@ -9,7 +9,9 @@ class App extends Component {
 		super(props);
 		this.regionRenderer = this.regionRenderer.bind(this);
 		this.onChange = this.onChange.bind(this);
-		this.uuidv4 = this.uuidv4.bind(this);
+		this.addRegion = this.addRegion.bind(this);
+		this.addAnchor = this.addAnchor.bind(this);
+		this.addCapture = this.addCapture.bind(this);
 		this.state = {
 			current: 'anchor',
 			anchorName: '',
@@ -23,28 +25,38 @@ class App extends Component {
 		});
 	}
 
-	uuidv4() {
-		return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-		  var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-		  return v.toString(16);
-		});
-	  }
+	addAnchor() {
+		this.addRegion(57.31, 8.72, 20, 10, 'rgba(0, 255, 0, 0.5)', this.state.anchorName, null);
+	}
 
-	addAnchor = () => {
+	addCapture() {
+
+	}
+
+	addRegion(x, y, width, height, color, label, parent) {
+
+		const guid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+			var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+			return v.toString(16);
+		});
+
 		const regions = this.state.regions;
-		const tmp = {
-			x: 57.31182795698925,
-			y: 8.725341426403642,
-			width: 21.612903225806463,
-			height: 11.532625189681337,
-			new: false,
+		const region = {
+			x: x,
+			y: y,
+			width: width,
+			height: height,
 			data: {
-				label: this.state.anchorName
+				parent: parent,
+				label: label,
+				regionStyle: {
+					background: color
+				}
 			},
-			guid: this.uuidv4(),
+			guid: guid,
 			isChanging: false
 		};
-		regions.push(tmp);
+		regions.push(region);
 		this.setState({regions: regions});
 	}
 

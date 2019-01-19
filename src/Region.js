@@ -24,7 +24,6 @@ class Region extends Component {
 		);
 	}
 
-
 	render () {
 		const localStyle = {
 			width: this.props.width + '%',
