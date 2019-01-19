@@ -248,14 +248,12 @@ RegionSelect.propTypes = {
 	onChange: PropTypes.func.isRequired,
 	onDelete: PropTypes.func,
 	regionRenderer: PropTypes.func,
-	maxRegions: PropTypes.number,
 	debug: PropTypes.bool,
 	className: PropTypes.string,
 	style: PropTypes.object,
 	regionStyle: PropTypes.object
 };
 RegionSelect.defaultProps = {
-	maxRegions: Infinity,
 	debug: false,
 	regions: [],
 	constraint: false

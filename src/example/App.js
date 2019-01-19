@@ -72,21 +72,14 @@ class App extends Component {
 
 	render() {
 
-		const regionStyle = {
-			background: 'rgba(255, 0, 0, 0.5)'
-		};
-
 		return (
 			<div style={{ display: 'flex' }}>
 				<div style={{ flexGrow: 1, flexShrink: 1, width: '50%' }}>
 					<RegionSelect
-						maxRegions={0}
-						regions={this.state.regions}
-            			regionStyle={regionStyle}
 						constraint
-						onChange={this.onChange}
+						regions={this.state.regions}
 						regionRenderer={this.regionRenderer}
-						style={{ border: '1px solid black' }}
+						onChange={this.onChange}
 					>
 						<img src='/static/example-doc.jpg' width='100%'/>
 					</RegionSelect>
