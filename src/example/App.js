@@ -9,6 +9,7 @@ class App extends Component {
 		super(props);
 		this.regionRenderer = this.regionRenderer.bind(this);
 		this.onChange = this.onChange.bind(this);
+		this.uuidv4 = this.uuidv4.bind(this);
 		this.state = {
 			current: 'anchor',
 			anchorName: '',
@@ -22,7 +23,12 @@ class App extends Component {
 		});
 	}
 
-
+	uuidv4() {
+		return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+		  var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+		  return v.toString(16);
+		});
+	  }
 
 	addAnchor = () => {
 		const regions = this.state.regions;
@@ -33,9 +39,9 @@ class App extends Component {
 			height: 11.532625189681337,
 			new: false,
 			data: {
-				label: this.state.anchorName,
-				index: regions.length
+				label: this.state.anchorName
 			},
+			guid: this.uuidv4(),
 			isChanging: false
 		};
 		regions.push(tmp);

@@ -10,7 +10,7 @@ class Region extends Component {
 
 	delete = () => {
 		console.log("delete in regin");
-		this.props.onDelete ? this.props.onDelete(this.props.index) : null;
+		this.props.onDelete ? this.props.onDelete(this.props.guid) : null;
 	}
 
 	renderHandles () {
@@ -36,7 +36,7 @@ class Region extends Component {
 		const dataRenderArgs = {
 			data: this.props.data,
 			isChanging: this.props.changing,
-			index: this.props.index
+			guid: this.props.guid
 		};
 
 		return (
@@ -57,7 +57,7 @@ Region.propTypes = {
 	y: PropTypes.number.isRequired,
 	width: PropTypes.number.isRequired,
 	height: PropTypes.number.isRequired,
-	index: PropTypes.number.isRequired,
+	guid: PropTypes.string.isRequired,
 	onCropStart: PropTypes.func.isRequired,
 	changing: PropTypes.bool,
 	dataRenderer: PropTypes.func,
