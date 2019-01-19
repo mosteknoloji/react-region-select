@@ -22,21 +22,34 @@ class App extends Component {
 		});
 	}
 
+
+
+	addAnchor = () => {
+		const regions = this.state.regions;
+		const tmp = {
+			x: 57.31182795698925,
+			y: 8.725341426403642,
+			width: 21.612903225806463,
+			height: 11.532625189681337,
+			new: false,
+			data: {
+				label: this.state.anchorName,
+				index: regions.length
+			},
+			isChanging: false
+		};
+		regions.push(tmp);
+		this.setState({regions: regions});
+	}
+
 	changeRegionData (index, event) {
+
 		const region = this.state.regions[index];
 		let color;
-		switch (event.target.value) {
-		case '1':
+		if (region.data.label === 'anchor') {
 			color = 'rgba(0, 255, 0, 0.5)';
-			break;
-		case '2':
+		} else {
 			color = 'rgba(0, 0, 255, 0.5)';
-			break;
-		case '3':
-			color = 'rgba(255, 0, 0, 0.5)';
-			break;
-		default:
-			color = 'rgba(0, 0, 0, 0.5)';
 		}
 
 		region.data.regionStyle = {
@@ -55,17 +68,14 @@ class App extends Component {
 		if (!regionProps.isChanging) {
 			return (
 				<div style={{ position: 'absolute', right: 0, bottom: '-1.5em' }}>
-					<select onChange={(event) => this.changeRegionData(regionProps.index, event)} value={regionProps.data.dataType}>
-						<option value='1'>Green</option>
-						<option value='2'>Blue</option>
-						<option value='3'>Red</option>
-					</select>
+				<label>{regionProps.data.label}</label>
 				</div>
 			);
 		}
 	}
 
 	render() {
+
 		const regionStyle = {
 			background: 'rgba(255, 0, 0, 0.5)'
 		};

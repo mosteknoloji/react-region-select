@@ -8,8 +8,9 @@ class Region extends Component {
 		super(props);
 	}
 
-	delete() {
-		this.props.dataRenderer ? this.props.dataRenderer.onDelete(this.props.index) : null;
+	delete = () => {
+		console.log("delete in regin");
+		this.props.onDelete ? this.props.onDelete(this.props.index) : null;
 	}
 
 	renderHandles () {
@@ -45,7 +46,7 @@ class Region extends Component {
 				onTouchStart={this.props.onCropStart}
 				data-wrapper="wrapper"
 				>
-				{this.props.handles ? this.renderHandles() : null}
+				{this.renderHandles()}
 				{this.props.dataRenderer ? this.props.dataRenderer(dataRenderArgs) : null}
 			</div>
 		);
@@ -58,7 +59,6 @@ Region.propTypes = {
 	height: PropTypes.number.isRequired,
 	index: PropTypes.number.isRequired,
 	onCropStart: PropTypes.func.isRequired,
-	handles: PropTypes.bool,
 	changing: PropTypes.bool,
 	dataRenderer: PropTypes.func,
 	data: PropTypes.object,
