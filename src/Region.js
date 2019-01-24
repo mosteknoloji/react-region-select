@@ -10,6 +10,9 @@ class Region extends Component {
 
 
 	renderHandles () {
+		if (this.props.data.regionStyle.type === 'target') {
+			return (null);
+		}
 		return (
 			<div>
 				<div data-dir='se' style={style.RegionHandleSE} />
@@ -21,21 +24,34 @@ class Region extends Component {
 	}
 
 	render () {
-		const localStyle = {
-			width: this.props.width + '%',
-			height: this.props.height + '%',
+		var regionStyle = null;
+		var localStyle = {
 			left: `${this.props.x}%`,
 			top: `${this.props.y}%`
 		};
+
 		const dataRenderArgs = {
 			data: this.props.data,
 			isChanging: this.props.changing,
 			guid: this.props.guid
 		};
 
+		if (this.props.data.regionStyle.type === 'target') {
+			regionStyle = style.Target;
+			localStyle = {
+				width: this.props.width + 'px',
+				height: this.props.height + 'px',
+			}
+		} else {
+			regionStyle = style.Region;
+			localStyle = {
+				width: this.props.width + '%',
+				height: this.props.height + '%'
+			};
+		}
 		return (
 			<div
-				style={objectAssign({}, style.Region, localStyle, this.props.customStyle, this.props.data.regionStyle)}
+				style={objectAssign({}, regionStyle, localStyle, this.props.customStyle, this.props.data.regionStyle)}
 				onMouseDown={this.props.onCropStart}
 				onTouchStart={this.props.onCropStart}
 				data-wrapper="wrapper"

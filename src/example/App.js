@@ -12,10 +12,12 @@ class App extends Component {
 		this.addRegion = this.addRegion.bind(this);
 		this.addAnchor = this.addAnchor.bind(this);
 		this.addCapture = this.addCapture.bind(this);
+		this.addTarget = this.addTarget.bind(this);
 		this.state = {
 			current: 'anchor',
 			anchorName: '',
 			captureName: '',
+			targetName: '',
 			regions: []
 		};
 	}
@@ -26,7 +28,7 @@ class App extends Component {
 	}
 
 	addAnchor() {
-		this.addRegion(57.31, 8.72, 20, 10, 'rgba(255, 255, 0, 0.5)', this.state.anchorName, null);
+		this.addRegion(57.31, 8.72, 20, 10, 'rgba(255, 255, 0, 0.5)', this.state.anchorName, null, 'anchor');
 	}
 
 	addCapture() {
@@ -35,16 +37,26 @@ class App extends Component {
 		const anchor = this.state.regions[index];
 		// anchor ex
 
-		this.addRegion(57.31, 8.72, 20, 10, 'rgba(0, 255, 0, 0.5)', this.state.captureName, anchor.guid);
+		this.addRegion(57.31, 8.72, 20, 10, 'rgba(0, 255, 0, 0.5)', this.state.captureName, anchor.guid, 'capture');
 	}
 
-	addRegion(x, y, width, height, color, label, parent) {
+	addTarget() {
+
+		// anchor
+		const index = this.state.regions.findIndex(x => x.data.parent === null);
+		const anchor = this.state.regions[index];
+		// anchor ex
+
+		this.addRegion(16, 16, 24, 24, 'rgba(0, 0, 0, 0)', this.state.targetName, anchor.guid, 'target');
+	}
+
+	addRegion(x, y, width, height, color, label, parent, regionType) {
 
 		const guid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
 			var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
 			return v.toString(16);
 		});
-		
+
 		const regions = this.state.regions;
 		const region = {
 			x: x,
@@ -55,7 +67,8 @@ class App extends Component {
 				parent: parent,
 				label: label,
 				regionStyle: {
-					background: color
+					background: color,
+					type: regionType
 				}
 			},
 			guid: guid,
@@ -108,6 +121,9 @@ class App extends Component {
 					<br />
 					<input onChange={(event) => this.setState({captureName: event.target.value})}></input>
 					<button onClick={this.addCapture}>Add Capture</button>
+					<br />
+					<input onChange={(event) => this.setState({targetName: event.target.value})}></input>
+					<button onClick={this.addTarget}>Add Target</button>
 					<br />
 				</div>
 

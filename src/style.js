@@ -6,6 +6,10 @@ const style = {
 		outline: '1px dashed rgba(255,255,255,0.5)',
 		cursor: 'move'
 	},
+	Target: {
+		position: 'absolute',
+		cursor: 'move'
+	},
 	RegionHandleSE: {
 		position: 'absolute',
 		bottom: -1 * handleSize/2,
