@@ -24,7 +24,12 @@ class Region extends Component {
 	}
 
 	render () {
-		var localStyle = null;
+		var localStyle = {
+			width: this.props.width + '%',
+			height: this.props.height + '%',
+			left: `${this.props.x}%`,
+			top: `${this.props.y}%`
+		};
 		var regionStyle = null;
 		const dataRenderArgs = {
 			data: this.props.data,
@@ -34,20 +39,8 @@ class Region extends Component {
 
 		if (this.props.data.regionStyle.type === 'target') {
 			regionStyle = style.Target;
-			localStyle = {
-				width: this.props.width + 'px',
-				height: this.props.height + 'px',
-				left: `${this.props.x}%`,
-				top: `${this.props.y}%`
-			};
 		} else {
 			regionStyle = style.Region;
-			localStyle = {
-				width: this.props.width + '%',
-				height: this.props.height + '%',
-				left: `${this.props.x}%`,
-				top: `${this.props.y}%`
-			};
 		}
 		return (
 			<div
