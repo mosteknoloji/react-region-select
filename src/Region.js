@@ -10,7 +10,7 @@ class Region extends Component {
 
 
 	renderHandles () {
-		if (this.props.data.regionStyle.type === 'target') {
+		if (this.props.data.regionStyle.type === 'point') {
 			return (null);
 		}
 		return (
@@ -37,7 +37,7 @@ class Region extends Component {
 			guid: this.props.guid
 		};
 
-		if (this.props.data.regionStyle.type === 'target') {
+		if (this.props.data.regionStyle.type === 'point') {
 			regionStyle = style.Target;
 		} else {
 			regionStyle = style.Region;
